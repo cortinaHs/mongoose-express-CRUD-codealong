@@ -1,4 +1,12 @@
 <h1>BOOKS</h1>
+
+<section id="search">
+    <form action="/books" method="GET">
+        <input type="text" name="title" placeholder="Harry Potter">
+        <input type="number" name="rating" placeholder="minimum Rating">
+        <button type="submit">Search</button>
+    </form>
+</section>
  
 {{#each books}}
     <section class="book-summary">
