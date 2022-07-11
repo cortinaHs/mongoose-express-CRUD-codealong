@@ -1,0 +1,31 @@
+<h2>Create a book</h2>
+
+<form action="/books/create" method="post">
+    <br>
+  <label> Title:
+    <br>
+    <input type="text" name="title" />
+  </label>
+    <br>
+    <br>
+  <label> Author:
+    <br>
+    <input type="text" name="author" />
+  </label>
+    <br>
+    <br>
+  <label> Description:
+    <br>
+    <textarea name="description" cols="30" rows="4"> </textarea>
+  </label>
+    <br>
+    <br>
+  <label> Rate:
+    <br>
+    <input type="number" name="rating" min="1" max="10" />
+  </label>
+    <br>
+    <br>
+    <br>
+  <button type="submit"> Create </button>
+</form>

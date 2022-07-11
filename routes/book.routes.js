@@ -15,11 +15,8 @@ router.get("/books", (req, res, next) => {
     filter.rating = {$gte: req.query.rating}
   }
 
-  console.log(filter)
-
   Book.find(filter)
     .then( (booksFromDB) => {
-        console.log(booksFromDB)
         res.render("books/books-list", { books: booksFromDB })
     })
     .catch( (err) => {
@@ -27,6 +24,18 @@ router.get("/books", (req, res, next) => {
       next(error)
     })
 });
+
+
+router.get('/books/create', (req, res) => res.render('books/book-create.hbs'));
+
+router.post('/books/create', (req, res, next) => {
+  const { title, author, description, rating } = req.body;
+
+  Book.create({ title, author, description, rating })
+    .then(() => res.redirect('/books'))
+    .catch(error => next(error));
+});
+
 
 router.get('/books/:bookId', (req, res) => {
 
