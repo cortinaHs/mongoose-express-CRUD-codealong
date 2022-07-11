@@ -19,8 +19,8 @@ router.get("/books", (req, res, next) => {
     .then( (booksFromDB) => {
         res.render("books/books-list", { books: booksFromDB })
     })
-    .catch( (err) => {
-      console.log("Error getting data from DB:", err)
+    .catch( (error) => {
+      console.log("Error getting data from DB:", error)
       next(error)
     })
 });
@@ -33,7 +33,7 @@ router.post('/books/create', (req, res, next) => {
 
   Book.create({ title, author, description, rating })
     .then(() => res.redirect('/books'))
-    .catch(error => next(error));
+    .catch(error => next("Error creating new Document:", error));
 });
 
 
@@ -42,16 +42,41 @@ router.get('/books/:bookId', (req, res) => {
   const { bookId } = req.params;
 
   Book.findById(bookId)
-    .then(book => {
-      console.log(book)
-      res.render('books/book-details.hbs', {book})
-    })
+    .then(book => res.render("books/book-details.hbs", {book}))
     .catch(error => {
-      console.log('Error while retrieving book details: ', error);
+      console.log("Error while retrieving book details: ", error);
  
       // Call the error-middleware to display the error page to the user
       next(error);
     })
 });
+
+router.get('/books/:bookId/edit', (req, res, next) => {
+  const { bookId } = req.params;
+ 
+  Book.findById(bookId)
+    .then(bookToEdit => {
+      res.render('books/book-edit.hbs', { book: bookToEdit });
+    })
+    .catch(error => next(error));
+});
+
+router.post('/books/:bookId/edit', (req, res, next) => {
+  const { bookId } = req.params;
+  const { title, description, author, rating } = req.body;
+ 
+  Book.findByIdAndUpdate(bookId, { title, description, author, rating }, { new: true })
+    .then(updatedBook => res.redirect(`/books/${updatedBook.id}`)) // go to the details page to see the updates
+    .catch(error => next(error));
+});
+
+router.post('/books/:bookId/delete', (req, res, next) => {
+  const { bookId } = req.params;
+ 
+  Book.findByIdAndDelete(bookId)
+    .then(() => res.redirect('/books'))
+    .catch(error => next(error));
+});
+ 
 
 module.exports = router;

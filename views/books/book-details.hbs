@@ -3,5 +3,10 @@
 <p>Written by: {{book.author}}</p>
 <p>Summary: {{book.description}}</p>
 <p>Rating: {{book.rating}}/10</p>
+<br>
+<a href="/books/{{{book._id}}}/edit">Edit</a>
+<form action="/books/{{{book._id}}}/delete" method="POST">
+    <button>Delete</button>
+</form>
 <hr>
 <a href="/books">Back</a>
