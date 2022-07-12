@@ -12,12 +12,11 @@
 
 {{#each books}}
     <section class="book-summary">
-        <h2>{{title}}</h3>
+        <h2>{{title}}</h2>
         <div>
-            Author: {{this.author}} <br />
+            Author: {{this.author.name}} <br />
             Rating: {{this.rating}} <br />
-            <a href="/books/{{_id}}">See details</a>
-            <br>
+            <a href="/books/{{_id}}">See details</a> |
             <a href="/books/{{_id}}/edit">Edit</a>
             <br>
             <form action="/books/{{_id}}/delete" method="POST">

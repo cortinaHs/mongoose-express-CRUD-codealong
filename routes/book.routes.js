@@ -1,4 +1,5 @@
 const Book = require("../models/Book.model");
+const Author = require('../models/Author.model');
 
 const router = require("express").Router();
 
@@ -16,6 +17,7 @@ router.get("/books", (req, res, next) => {
   }
 
   Book.find(filter)
+    .populate("author")
     .then( (booksFromDB) => {
         res.render("books/books-list", { books: booksFromDB })
     })
@@ -26,7 +28,14 @@ router.get("/books", (req, res, next) => {
 });
 
 
-router.get('/books/create', (req, res) => res.render('books/book-create.hbs'));
+router.get('/books/create', (req, res) => {
+
+  Author.find()
+    .then((authorsFromDB) => {
+      res.render('books/book-create.hbs', {authors: authorsFromDB})
+    })
+    .catch( (error) => console.log("Error getting data from DB:", error))
+});
 
 router.post('/books/create', (req, res, next) => {
   const { title, author, description, rating } = req.body;
@@ -42,6 +51,7 @@ router.get('/books/:bookId', (req, res) => {
   const { bookId } = req.params;
 
   Book.findById(bookId)
+    .populate("author")
     .then(book => res.render("books/book-details.hbs", {book}))
     .catch(error => {
       console.log("Error while retrieving book details: ", error);
@@ -55,6 +65,7 @@ router.get('/books/:bookId/edit', (req, res, next) => {
   const { bookId } = req.params;
  
   Book.findById(bookId)
+    .populate("author")
     .then(bookToEdit => {
       res.render('books/book-edit.hbs', { book: bookToEdit });
     })
