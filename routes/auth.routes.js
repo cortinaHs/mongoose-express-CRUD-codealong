@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 
 const User = require('../models/User.model');
 
+const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
+
 const bcryptjs = require('bcryptjs');
 const saltRounds = 10;
 
-router.get('/signup', (req, res) => res.render('auth/signup'));
+router.get('/signup', isLoggedOut, (req, res) => res.render('auth/signup'));
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', isLoggedOut, (req, res, next) => {
     const { username, email, password } = req.body;
 
     //backend validation
@@ -41,6 +43,7 @@ router.post('/signup', (req, res, next) => {
               return User.create(userDetails)
         })
         .then(user => {
+            req.session.currentUser = user;
             res.redirect('/userProfile');
           })
           .catch(error => {
@@ -57,11 +60,9 @@ router.post('/signup', (req, res, next) => {
     });
 
 
-router.get('/login', (req, res) => res.render('auth/login'));
+router.get('/login', isLoggedOut, (req, res) => res.render('auth/login'));
 
-router.post('/login', (req, res, next) => {
-
-    console.log('SESSION =====> ', req.session);
+router.post('/login', isLoggedOut, (req, res, next) => {
 
     const { email, password } = req.body;
    
@@ -88,11 +89,11 @@ router.post('/login', (req, res, next) => {
 });
 
 
-router.get('/userProfile', (req, res) => {
+router.get('/userProfile', isLoggedIn, (req, res) => {
     res.render('users/user-profile', { userInSession: req.session.currentUser });
 });
 
-router.post('/logout', (req, res, next) => {
+router.post('/logout', isLoggedIn, (req, res, next) => {
     req.session.destroy(err => {
       if (err) next(err);
       res.redirect('/');

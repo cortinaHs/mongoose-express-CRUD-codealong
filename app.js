@@ -26,10 +26,17 @@ const projectName = "library-project";
 app.locals.appTitle = `${capitalized(projectName)} created with IronLauncher`;
 
 // 👇 Start handling routes here (mount)
+app.use((req, res, next) => {
+    res.locals.session = req.session; // allow access to session data from layout.hbs
+    next()
+});
+
 app.use("/", require("./routes/index.routes"));
 app.use('/', require('./routes/auth.routes'));
 app.use("/", require("./routes/book.routes"));
 app.use("/", require("./routes/author.routes"));
+
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

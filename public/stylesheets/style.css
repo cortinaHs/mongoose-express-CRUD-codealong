@@ -16,3 +16,12 @@ h1 {
   background-color: rgb(235, 212, 170);
   padding: 1rem;
 }
+
+#userNav {
+  position: absolute;
+  right: 100px;
+}
+
+#menuNav {
+  position: absolute;
+}

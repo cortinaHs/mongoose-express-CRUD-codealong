@@ -1,6 +1,3 @@
-// config/session.config.js
-
-// require session
 const session = require('express-session');
 
 const MongoStore = require('connect-mongo');
@@ -23,10 +20,11 @@ module.exports = app => {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 60000 // 60 * 1000 ms === 1 min
+        maxAge: 3600000 // (1h) 60 * 1000 ms === 1 min  or 1000 * 60 * 60 * 24 // 24h
       }, 
       store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost/library-project'
+      mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost/library-project',
+      ttl: 60 * 60
       })
     })
   );
