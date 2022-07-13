@@ -3,7 +3,6 @@ const Author = require('../models/Author.model');
 
 const router = require("express").Router();
 
-/* GET home page */
 router.get("/books", (req, res, next) => {
 
   let filter = {};

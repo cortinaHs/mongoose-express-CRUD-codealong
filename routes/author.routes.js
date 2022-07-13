@@ -3,7 +3,7 @@ const Author = require('../models/Author.model');
 
 const router = require("express").Router();
 
-/* GET home page */
+
 router.get("/authors", (req, res, next) => {
 
     let books; // we create a variable in the parent scope
